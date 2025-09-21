@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { motion } from "framer-motion";
@@ -15,8 +15,10 @@ import FAQ from "./components/FAQ";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
-// Setup checker
-import "./utils/setupChecker";
+// Setup checker - only in development
+if (process.env.NODE_ENV === 'development') {
+  import("./utils/setupChecker");
+}
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);

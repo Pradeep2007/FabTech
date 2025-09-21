@@ -36,12 +36,16 @@ export const checkSetupStatus = () => {
   // Check 3: Firebase imports
   console.log('\n📦 Firebase Imports:');
   try {
-    const { db } = require('../firebase/config');
-    if (db) {
-      console.log('✅ Firebase database imported successfully');
-    } else {
-      console.log('❌ Firebase database not initialized');
-    }
+    // Dynamic import to avoid build issues
+    import('../firebase/config').then(({ db }) => {
+      if (db) {
+        console.log('✅ Firebase database imported successfully');
+      } else {
+        console.log('❌ Firebase database not initialized');
+      }
+    }).catch(error => {
+      console.log('❌ Error importing Firebase:', error.message);
+    });
   } catch (error) {
     console.log('❌ Error importing Firebase:', error.message);
   }
@@ -62,8 +66,8 @@ export const checkSetupStatus = () => {
   return envVarsOk;
 };
 
-// Auto-run setup check in development
-if (process.env.NODE_ENV === 'development') {
+// Auto-run setup check in development only
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
   // Run after a short delay to ensure all modules are loaded
   setTimeout(() => {
     checkSetupStatus();
